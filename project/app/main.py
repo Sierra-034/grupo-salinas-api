@@ -7,7 +7,7 @@ app = FastAPI()
 @app.get('/')
 def index(settings: Settings = Depends(get_settings)):
     return {
-        'Hola': 'mundo!',
+        'Hello': 'world!',
         'environment': settings.environment,
         'testing': settings.testing,
     }
