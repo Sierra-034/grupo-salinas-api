@@ -11,8 +11,11 @@ services:
     environment:
       - ENVIRONMENT=dev
       - TESTING=0
-      - DATABASE_URL=postgres://postgres:postgres@web-db:5432/empleados_dev
-      - DATABASE_TEST=postgres://postgres:postgres@web-db:5432/empleados_test
+      - DATABASE_NAME=empleados_dev
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_HOST=web-db
+      - DATABASE_PORT=5432
     depends_on:
       - web-db
 
