@@ -25,12 +25,12 @@ class MyBaseSchema(BaseModel):
 
 class UsuarioInSchema(BaseModel):
     nombre_usuario: str = Field(..., min_length=2, max_length=50)
-    password: str = Field(..., min_length=4, max_length=50)
+    password: str = Field(..., min_length=4)
 
 
 class UsuarioOutSchema(MyBaseSchema):
     nombre_usuario: str
-    rol: RoleType
+    rol: str
     created_at: datetime.datetime
 
 
@@ -65,3 +65,8 @@ class EmpleadoInSchema(EmpleadoSchema):
 class EmpleadoOutSchema(EmpleadoSchema):
     id: int
     fecha_nacimiento: datetime.date
+
+
+class AuthenticationSchema(BaseModel):
+    access_token: str
+    token_type: str

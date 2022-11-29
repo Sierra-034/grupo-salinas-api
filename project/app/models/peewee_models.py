@@ -4,6 +4,8 @@ from peewee import Model, CharField, DateTimeField, \
     FixedCharField, DateField
 from playhouse.postgres_ext import PostgresqlDatabase
 
+import bcrypt
+
 from ..config import DatabaseSettings
 
 db_settings = DatabaseSettings()
@@ -24,9 +26,21 @@ class BaseModel(Model):
 
 class Usuario(BaseModel):
     nombre_usuario = CharField(max_length=50, unique=True)
-    password = CharField(max_length=50)
+    password = CharField()
     rol = CharField(max_length=13, default='operador')
     created_at = DateTimeField(default=datetime.now)
+
+    @classmethod
+    def authenticate(cls, nombre_usuario, password):
+        user_authenticated = cls.get_or_none(
+            cls.nombre_usuario == nombre_usuario)
+        if user_authenticated and user_authenticated.password == cls.create_password(password):
+            return user_authenticated
+
+    @classmethod
+    def create_password(cls, password):
+        _bytes = password.encode('utf-8')
+        return bcrypt.hashpw(_bytes, bcrypt.gensalt(6))
 
 
 class Empleado(BaseModel):
