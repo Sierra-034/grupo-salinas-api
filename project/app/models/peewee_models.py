@@ -35,6 +35,9 @@ class Usuario(BaseModel):
         user_authenticated = cls.get_or_none(
             cls.nombre_usuario == nombre_usuario)
 
+        if not user_authenticated:
+            return None
+
         encoded_password = password.encode('utf-8')
         encoded_hashed_password = user_authenticated.password.encode('utf-8')
         if user_authenticated and bcrypt.checkpw(encoded_password, encoded_hashed_password):
