@@ -1,8 +1,12 @@
 import datetime
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 from pydantic.utils import GetterDict
+
+from .custom_validators import RoleType, rol_must_be_one_of, \
+    curp_validator, rfc_validator, \
+    codigo_postal_validator, fecha_nacimiento_validator
 
 
 class PeeweeGetterDict(GetterDict):
@@ -26,17 +30,38 @@ class UsuarioInSchema(BaseModel):
 
 class UsuarioOutSchema(MyBaseSchema):
     nombre_usuario: str
-    rol: str
+    rol: RoleType
     created_at: datetime.datetime
 
 
 class UsuarioModRoleSchema(MyBaseSchema):
-    role: str   # TODO Implement a custom type
+    rol: RoleType
 
+    # validators
+    _fixed_choices = validator('rol')(rol_must_be_one_of)
 
 class EmpleadoSchema(MyBaseSchema):
-    nombre: str = Field(..., min_length=2, max_length=50)
-    curp: str   # TODO Implement a custom type
-    rfc: str    # TODO Implement a custom type
-    codigo_postal: str  # TODO Implement a custom type
+    nombre: str = Field(..., min_length=2, max_length=50,
+                        example='Samuel Gómez')
+    curp: str = Field(..., example='GOBS971215HVZMLM04')
+    rfc: str = Field(..., example='GOBS971215UH5')
+    codigo_postal: str = Field(..., example='11490')
+
+    # Validators
+    _curp_validator = validator('curp', allow_reuse=True)(curp_validator)
+    _rfc_validator = validator('rfc', allow_reuse=True)(rfc_validator)
+    _codigo_postal_validator = validator(
+        'codigo_postal', allow_reuse=True)(codigo_postal_validator)
+
+
+class EmpleadoInSchema(EmpleadoSchema):
+    fecha_nacimiento: str = Field(..., example='1997-12-15')
+    
+    # Validators
+    _fecha_nacimiento_validator = validator(
+        'fecha_nacimiento', allow_reuse=True)(fecha_nacimiento_validator)
+
+
+class EmpleadoOutSchema(EmpleadoSchema):
+    id: int
     fecha_nacimiento: datetime.date
