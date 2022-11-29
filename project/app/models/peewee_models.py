@@ -1,4 +1,4 @@
-import datetime as dt
+from datetime import datetime
 
 from peewee import Model, CharField, DateTimeField, \
     FixedCharField, DateField
@@ -26,7 +26,7 @@ class Usuario(BaseModel):
     nombre_usuario = CharField(max_length=50, unique=True)
     password = CharField(max_length=50)
     rol = CharField(max_length=13, default='operador')
-    created_at = DateTimeField(default=dt.datetime.now)
+    created_at = DateTimeField(default=datetime.now)
 
 
 class Empleado(BaseModel):
