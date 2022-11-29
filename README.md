@@ -8,7 +8,7 @@ Esta guía asume que usted posée una instalación de `Docker 20.10.17` y `docke
 2. Sitúese dentro de la carpeta raíz del proyecto `grupo-salinas-api`.
 3. Desde esta ubicación ejecute `docker-compose up -d --build`.
 4. Puede ver los logs del servidor con `docker-compose logs -f web`.
-5. Ahora haga click [aquí](127.0.0.1:8004/docs) para visitar la documentación del projecto.
+5. Ahora ingrese la siguiente dirección en la barra de búsqueda de su navegador `http://127.0.0.1:8004/docs` para visitar la documentación del projecto.
 
 ## Instrucciones para interactuar con la base de datos
 
@@ -22,6 +22,8 @@ La base de datos utilizada en este proyecto es PostgreSQL
 6. Consulte las tablas que necesite
 
 ## Instrucciones de uso para la API REST
+
+### NOTA: Su sesión está configurada para expirar cada 5 minutos (también puede validarlo)
 
 1. El servidor valida el primer registro de usuario del sistema (no está autorizada ninguna petición sin un registro de usuario). Si es el primer usuario del sistema, éste le asignará el rol de `administrador`. Los siguientes usuarios creados, por defecto tendrán el rol de `operador` siguiendo la práctica del mínimo privilegio.
 ```
