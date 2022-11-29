@@ -37,7 +37,7 @@ def create_user(usuario_in: UsuarioInSchema, is_very_first: ... = Depends(is_thi
     dependencies=[Depends(RoleChecker(['administrador']))],)
 def update_user(user_name: str, usuario_mod: UsuarioModRoleSchema):
     query = Usuario.update(**usuario_mod.dict()
-                           ).where(Usuario.id == user_name).returning(Usuario)
+                           ).where(Usuario.nombre_usuario == user_name).returning(Usuario)
     user_updated = query.execute()
     if len(user_updated) == 0:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
