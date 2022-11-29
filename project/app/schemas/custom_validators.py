@@ -28,20 +28,26 @@ fecha_nacimiento_regex = re.compile(
 )
 
 
-class RoleType(Enum):
-    ADMINISTRADOR = 'administrador'
-    SUPERVISOR = 'supervisor'
-    OPERADOR = 'operador'
+class UserRole(str):
+    @classmethod
+    def __get_validators__(cls):
+        yield cls.validate
 
-
-def rol_must_be_one_of(value: str) -> str:
-    if not isinstance(value, RoleType):
-        raise ValueError(
-            'El valor del campo rol debe ser uno de: \
-            (administrador, supervisor, operador)'
+    @classmethod
+    def __modify_schema__(cls, field_schema):
+        field_schema.update(
+            opciones='(administrador, supervisor, operador)',
+            examples=['administrador', 'supervisor', 'operador']
         )
 
-    return value
+    @classmethod
+    def validate(cls, value):
+        allowed_values = ('administrador', 'supervisor', 'operador')
+        if value not in allowed_values:
+            raise ValueError(
+                f'El campo rol debe ser uno de: {str(allowed_values)}')
+
+        return value
 
 
 def create_formatter(regular_expression, field_name):

@@ -4,9 +4,8 @@ from typing import Any
 from pydantic import BaseModel, Field, validator
 from pydantic.utils import GetterDict
 
-from .custom_validators import RoleType, rol_must_be_one_of, \
-    curp_validator, rfc_validator, \
-    codigo_postal_validator, fecha_nacimiento_validator
+from .custom_validators import curp_validator, rfc_validator, \
+    codigo_postal_validator, fecha_nacimiento_validator, UserRole
 
 
 class PeeweeGetterDict(GetterDict):
@@ -30,15 +29,13 @@ class UsuarioInSchema(BaseModel):
 
 class UsuarioOutSchema(MyBaseSchema):
     nombre_usuario: str
-    rol: RoleType
+    rol: UserRole
     created_at: datetime.datetime
 
 
 class UsuarioModRoleSchema(MyBaseSchema):
-    rol: RoleType
+    rol: UserRole
 
-    # validators
-    _fixed_choices = validator('rol')(rol_must_be_one_of)
 
 class EmpleadoSchema(MyBaseSchema):
     nombre: str = Field(..., min_length=2, max_length=50,
@@ -56,7 +53,7 @@ class EmpleadoSchema(MyBaseSchema):
 
 class EmpleadoInSchema(EmpleadoSchema):
     fecha_nacimiento: str = Field(..., example='1997-12-15')
-    
+
     # Validators
     _fecha_nacimiento_validator = validator(
         'fecha_nacimiento', allow_reuse=True)(fecha_nacimiento_validator)

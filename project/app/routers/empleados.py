@@ -1,26 +1,34 @@
 from typing import List
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, \
+    Depends
 
 from ..schemas import EmpleadoInSchema, EmpleadoOutSchema
 from ..models import Empleado
+from ..dependencies import RoleChecker
 
 router = APIRouter(prefix='/empleados')
 
 
-@router.post('', response_model=EmpleadoOutSchema)
+@router.post(
+    '', response_model=EmpleadoOutSchema,
+    dependencies=[Depends(RoleChecker(['administrador']))],)
 async def create_empleado(empleado_in: EmpleadoInSchema):
     empleado = Empleado.create(**empleado_in.dict())
     return empleado
 
 
-@router.get('', response_model=List[EmpleadoOutSchema])
+@router.get(
+    '', response_model=List[EmpleadoOutSchema],
+    dependencies=[Depends(RoleChecker(['administrador', 'operador', 'supervisor']))],)
 async def get_empleados(page: int = 1, limit: int = 10):
     empleados = Empleado.select().paginate(page, limit)
     return [empleado for empleado in empleados]
 
 
-@router.get('/{empleado_id}', response_model=EmpleadoOutSchema)
+@router.get(
+    '/{empleado_id}', response_model=EmpleadoOutSchema,
+    dependencies=[Depends(RoleChecker(['administrador', 'operador', 'supervisor']))],)
 async def get_empleado(empleado_id: int):
     empleado = Empleado.get_or_none(Empleado.id == empleado_id)
     print(empleado)
@@ -31,7 +39,9 @@ async def get_empleado(empleado_id: int):
     return empleado
 
 
-@router.put('/{empleado_id}', response_model=EmpleadoOutSchema)
+@router.put(
+    '/{empleado_id}', response_model=EmpleadoOutSchema,
+    dependencies=[Depends(RoleChecker(['administrador', 'supervisor']))])
 async def update_empleado(empleado_id: int, empleado_body: EmpleadoInSchema):
     query = Empleado.update(**empleado_body.dict()
                             ).where(Empleado.id == empleado_id).returning(Empleado)
@@ -43,7 +53,9 @@ async def update_empleado(empleado_id: int, empleado_body: EmpleadoInSchema):
     return empleado_updated[0].__data__
 
 
-@router.delete('/{empleado_id}', response_model=EmpleadoOutSchema)
+@router.delete(
+    '/{empleado_id}', response_model=EmpleadoOutSchema,
+    dependencies=[Depends(RoleChecker(['administrador']))],)
 async def delete_empleado(empleado_id: int):
     empleado = Empleado.get_or_none(Empleado.id == empleado_id)
     if not empleado:

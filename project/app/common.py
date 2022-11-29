@@ -6,7 +6,7 @@ from .config import Settings
 settings = Settings()
 
 
-def create_access_token(user, expiration_delta=2):
+def create_access_token(user, expiration_delta=5):
     data = {
         'usuario_id': user.id,
         'nombre_usuario': user.nombre_usuario,
