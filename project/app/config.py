@@ -15,6 +15,7 @@ class DatabaseSettings(BaseSettings):
 class Settings(BaseSettings):
     environment: str = 'dev'
     testing: bool = 0
+    secret_key: str
 
 
 async def get_settings() -> BaseSettings:

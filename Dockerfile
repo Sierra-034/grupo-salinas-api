@@ -9,7 +9,8 @@ ENV PYTHONUNBUFFERED 1
 RUN apt-get update \
     && apt-get -y install netcat gcc \
     && apt-get clean \
-    && apt-get -y install python3-dev libpq-dev
+    && apt-get -y install python3-dev libpq-dev \
+    && apt-get install --yes build-essential cargo
 
 RUN pip install --upgrade pip
 

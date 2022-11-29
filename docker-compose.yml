@@ -11,6 +11,7 @@ services:
     environment:
       - ENVIRONMENT=dev
       - TESTING=0
+      - SECRET_KEY=supersecreto
       - DATABASE_NAME=empleados_dev
       - DATABASE_USER=postgres
       - DATABASE_PASSWORD=postgres
