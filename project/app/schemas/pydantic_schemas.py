@@ -30,7 +30,7 @@ class UsuarioInSchema(BaseModel):
 
 class UsuarioOutSchema(MyBaseSchema):
     nombre_usuario: str
-    rol: str
+    rol: RoleType
     created_at: datetime.datetime
 
 

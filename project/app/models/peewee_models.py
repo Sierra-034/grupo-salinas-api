@@ -27,7 +27,7 @@ class BaseModel(Model):
 class Usuario(BaseModel):
     nombre_usuario = CharField(max_length=50, unique=True)
     password = CharField()
-    rol = CharField(max_length=13, default='operador')
+    rol = CharField(default='operador')
     created_at = DateTimeField(default=datetime.now)
 
     @classmethod
